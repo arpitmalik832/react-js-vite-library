@@ -4,13 +4,13 @@
  * @file The file is saved as `.eslintrc.cjs`.
  */
 module.exports = {
+  env: { browser: true, es2021: true, jest: true },
   parser: '@babel/eslint-parser',
   extends: [
     'airbnb',
     'plugin:css-modules/recommended',
     'plugin:jsx-a11y/recommended',
     'prettier',
-    'react-app',
     'plugin:storybook/recommended',
     'plugin:jsdoc/recommended',
   ],
