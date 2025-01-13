@@ -10,10 +10,7 @@ import autoprefixerPlugin from 'autoprefixer';
 
 import icons_list from '../../../static/enums/icons_list.mjs';
 import svgrConfig from '../../../svgr.config.mjs';
-import stripCustomWindowVariablesPlugin from '../customPlugins/stripCustomWindowVariablesPlugin.mjs';
 import { ENVS } from '../../config/index.mjs';
-import copyPlugin from '../customPlugins/copyPlugin.mjs';
-import importStylesPlugin from '../customPlugins/importStylesPlugin.mjs';
 
 const config = {
   plugins: [
@@ -22,12 +19,6 @@ const config = {
       include: '**/*.svg',
     }),
     react(),
-    [ENVS.PROD, ENVS.BETA].includes(process.env.LIB_ENV) &&
-      stripCustomWindowVariablesPlugin({
-        variables: ['abc'],
-      }),
-    importStylesPlugin(),
-    copyPlugin(),
     compression({
       deleteOriginFile: false,
       algorithm: 'brotliCompress',
@@ -48,10 +39,11 @@ const config = {
   },
   build: {
     outDir: 'dist',
+    emptyOutDir: false,
     minify: [ENVS.PROD, ENVS.BETA].includes(process.env.LIB_ENV),
     sourcemap: ![ENVS.PROD, ENVS.BETA].includes(process.env.LIB_ENV),
     lib: {
-      entry: ['src/index.js', ...icons_list.map(i => `src/assets/icons/${i}`)],
+      entry: [...icons_list.map(i => `src/assets/icons/${i}`)],
     },
     rollupOptions: {
       external: [/node_modules/],
@@ -62,12 +54,7 @@ const config = {
           preserveModulesRoot: 'src',
           entryFileNames: `esm/[name].js`,
           chunkFileNames: `esm/[name].js`,
-          assetFileNames: assetInfo => {
-            if (assetInfo.name.endsWith('.css')) {
-              return `index.css`;
-            }
-            return `esm/assets/[name].[ext]`;
-          },
+          assetFileNames: `esm/assets/[name].[ext]`,
         },
         {
           format: 'cjs',
@@ -75,12 +62,7 @@ const config = {
           preserveModulesRoot: 'src',
           entryFileNames: `cjs/[name].js`,
           chunkFileNames: `cjs/[name].js`,
-          assetFileNames: assetInfo => {
-            if (assetInfo.name.endsWith('.css')) {
-              return `index.css`;
-            }
-            return `cjs/assets/[name].[ext]`;
-          },
+          assetFileNames: `cjs/assets/[name].[ext]`,
         },
       ],
     },
