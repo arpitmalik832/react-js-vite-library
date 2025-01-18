@@ -13,6 +13,7 @@ import stripCustomWindowVariablesPlugin from '../customPlugins/stripCustomWindow
 import { ENVS } from '../../config/index.mjs';
 import copyPlugin from '../customPlugins/copyPlugin.mjs';
 import importStylesPlugin from '../customPlugins/importStylesPlugin.mjs';
+import { pathChecks } from '../utils/pathUtils';
 
 const config = {
   plugins: [
@@ -66,17 +67,7 @@ const config = {
             }
             return `esm/assets/[name].[ext]`;
           },
-          paths: id => {
-            // Convert absolute paths to package names
-            if (id.includes('node_modules')) {
-              const parts = id.split('node_modules/');
-              const packagePath = parts[parts.length - 1];
-              // Handle scoped packages and regular packages
-              const matches = packagePath.match(/@[^/]+\/[^/]+|[^/]+/);
-              return matches ? matches[0] : packagePath;
-            }
-            return id;
-          },
+          paths: id => pathChecks(id),
         },
         {
           format: 'cjs',
@@ -87,17 +78,7 @@ const config = {
             }
             return `cjs/assets/[name].[ext]`;
           },
-          paths: id => {
-            // Convert absolute paths to package names
-            if (id.includes('node_modules')) {
-              const parts = id.split('node_modules/');
-              const packagePath = parts[parts.length - 1];
-              // Handle scoped packages and regular packages
-              const matches = packagePath.match(/@[^/]+\/[^/]+|[^/]+/);
-              return matches ? matches[0] : packagePath;
-            }
-            return id;
-          },
+          paths: id => pathChecks(id),
         },
       ],
     },
