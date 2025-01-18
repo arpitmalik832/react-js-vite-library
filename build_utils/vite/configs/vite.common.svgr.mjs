@@ -19,9 +19,7 @@ const config = {
       svgrOptions: svgrConfig,
       include: '**/*.svg',
     }),
-    react({
-      jsxRuntime: 'classic', // Use classic JSX transform
-    }),
+    react(),
     compression({
       deleteOriginFile: false,
       algorithm: 'brotliCompress',
