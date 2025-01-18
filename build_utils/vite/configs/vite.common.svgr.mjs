@@ -11,6 +11,7 @@ import autoprefixerPlugin from 'autoprefixer';
 import icons_list from '../../../static/enums/icons_list.mjs';
 import svgrConfig from '../../../svgr.config.mjs';
 import { ENVS } from '../../config/index.mjs';
+import { pathChecks } from '../utils/pathUtils';
 
 const config = {
   plugins: [
@@ -57,17 +58,7 @@ const config = {
           entryFileNames: `esm/[name].js`,
           chunkFileNames: `esm/[name].js`,
           assetFileNames: `esm/assets/[name].[ext]`,
-          paths: id => {
-            // Convert absolute paths to package names
-            if (id.includes('node_modules')) {
-              const parts = id.split('node_modules/');
-              const packagePath = parts[parts.length - 1];
-              // Handle scoped packages and regular packages
-              const matches = packagePath.match(/@[^/]+\/[^/]+|[^/]+/);
-              return matches ? matches[0] : packagePath;
-            }
-            return id;
-          },
+          paths: id => pathChecks(id),
         },
         {
           format: 'cjs',
@@ -76,17 +67,7 @@ const config = {
           entryFileNames: `cjs/[name].js`,
           chunkFileNames: `cjs/[name].js`,
           assetFileNames: `cjs/assets/[name].[ext]`,
-          paths: id => {
-            // Convert absolute paths to package names
-            if (id.includes('node_modules')) {
-              const parts = id.split('node_modules/');
-              const packagePath = parts[parts.length - 1];
-              // Handle scoped packages and regular packages
-              const matches = packagePath.match(/@[^/]+\/[^/]+|[^/]+/);
-              return matches ? matches[0] : packagePath;
-            }
-            return id;
-          },
+          paths: id => pathChecks(id),
         },
       ],
     },
