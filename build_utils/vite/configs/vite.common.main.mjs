@@ -21,9 +21,7 @@ const config = {
       svgrOptions: svgrConfig,
       include: '**/*.svg',
     }),
-    react({
-      jsxRuntime: 'classic', // Use classic JSX transform
-    }),
+    react(),
     [ENVS.PROD, ENVS.BETA].includes(process.env.LIB_ENV) &&
       stripCustomWindowVariablesPlugin({
         variables: ['abc'],
